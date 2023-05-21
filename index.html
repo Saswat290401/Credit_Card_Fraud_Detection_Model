@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credit Card Fraud Detection</title>
+</head>
+<body>
+    <h1>Credit Card Fraud Detection</h1>
+    <form action="/predict" method="post">
+        {% for feature in features %}
+            <label for="{{ feature }}">{{ feature }}</label>
+            <input type="text" name="{{ feature }}" required><br>
+        {% endfor %}
+        <input type="submit" value="Predict"><br>
+        {% if prediction %}
+            <p>Predicted fraud probability: {{ prediction }}</p>
+        {% endif %}
+    </form>
+</body>
+</html>
