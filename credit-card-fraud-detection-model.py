@@ -323,7 +323,3 @@ plt.title('Precision-Recall Curve for Multiple ML Algorithms')
 plt.legend(loc='lower left')
 plt.show()
 
-import pickle
-
-with open('D:\Credit Card Fraud\fraud_detection_model.pkl', 'wb') as f:
-    pickle.dump(model, f)
