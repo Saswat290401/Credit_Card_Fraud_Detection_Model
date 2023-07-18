@@ -1,19 +1,16 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Credit Card Fraud Detection</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Credit Card Fraud Detection</h1>
-    <form action="/predict" method="post">
-        {% for feature in features %}
-            <label for="{{ feature }}">{{ feature }}</label>
-            <input type="text" name="{{ feature }}" required><br>
-        {% endfor %}
-        <input type="submit" value="Predict"><br>
-        {% if prediction %}
-            <p>Predicted fraud probability: {{ prediction }}</p>
-        {% endif %}
+    <form action="{{ url_for('predict') }}" method="POST">
+        <input type="text" name="Time" placeholder="Time">
+        <input type="text" name="Amount" placeholder="Amount">
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
