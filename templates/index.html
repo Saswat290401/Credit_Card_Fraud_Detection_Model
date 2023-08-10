@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credit Card Fraud Detection</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Credit Card Fraud Detection</h1>
+        <form action="/predict" method="post">
+            <label for="time">Time:</label>
+            <input type="text" id="time" name="time" required>
+            <br>
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" name="amount" required>
+            <br>
+            {% for i in range(1, 29) %}
+                <label for="V{{ i }}">V{{ i }}:</label>
+                <input type="text" id="V{{ i }}" name="V{{ i }}" required>
+                <br>
+            {% endfor %}
+            <input type="submit" value="Predict">
+        </form>
+        {% if overall_fraud_probability is defined %}
+            <p class="result">Overall Fraud Probability: {{ overall_fraud_probability|round(2) }}%</p>
+        {% endif %}
+        {% if error_message is defined %}
+            <p class="error">{{ error_message }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

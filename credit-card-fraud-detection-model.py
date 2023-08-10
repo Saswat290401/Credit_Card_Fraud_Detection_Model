@@ -1,7 +1,12 @@
+import warnings
+
+warnings.filterwarnings("ignore")
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 
 df = pd.read_csv('creditcard.csv')
 
@@ -28,6 +33,7 @@ plt.xlabel("Transaction Type")
 plt.ylabel("Count")
 plt.show()
 
+cols = ['Time', 'Amount', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7', 'V8', 'V9', 'V10', 'V11', 'V12', 'V13', 'V14', 'V15', 'V16', 'V17', 'V18', 'V19', 'V20', 'V21', 'V22', 'V23', 'V24', 'V25', 'V26', 'V27', 'V28']
 
 for col in cols:
     plt.figure(figsize=(10, 5))
@@ -173,15 +179,9 @@ df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
 
 label_encoder = LabelEncoder()
 df['Class'] = label_encoder.fit_transform(df['Class'])
-
-
 df['Class'] = df['Class'].astype('category')
 df['Class'] = df['Class'].cat.codes
-
-
 print(df['Class'].value_counts())
-
-
 
 df.drop_duplicates(inplace=True)
 df.fillna(method='ffill', inplace=True)
@@ -199,8 +199,6 @@ y = df['Class']
 
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.decomposition import PCA
-import warnings
-
 
 df['Class'] = df['Class'].apply(lambda x: 1 if x == 'Fraud' else 0)
 
@@ -221,7 +219,6 @@ plt.scatter(pca_features[:, 0], pca_features[:, 1], c=y)
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
 plt.show()
-
 
 
 from sklearn.model_selection import train_test_split
@@ -245,7 +242,6 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
-
 
 
 scaler = StandardScaler()
@@ -294,12 +290,13 @@ y_pred_mlp = mlp.predict_proba(X_test)[:, 1]
 y_pred_dt = dt.predict_proba(X_test)[:, 1]
 y_pred_gb = gb.predict_proba(X_test)[:, 1]
 
+from sklearn.metrics import precision_recall_curve, auc
 
-precision_logreg, recall_logreg, _ = precision_recall_curve(y_true, y_pred_logreg)
-precision_rf, recall_rf, _ = precision_recall_curve(y_true, y_pred_rf)
-precision_mlp, recall_mlp, _ = precision_recall_curve(y_true, y_pred_mlp)
-precision_dt, recall_dt, _ = precision_recall_curve(y_true, y_pred_dt)
-precision_gb, recall_gb, _ = precision_recall_curve(y_true, y_pred_gb)
+precision_logreg, recall_logreg, _ = precision_recall_curve(y_test, y_pred_logreg)
+precision_rf, recall_rf, _ = precision_recall_curve(y_test, y_pred_rf)
+precision_mlp, recall_mlp, _ = precision_recall_curve(y_test, y_pred_mlp)
+precision_dt, recall_dt, _ = precision_recall_curve(y_test, y_pred_dt)
+precision_gb, recall_gb, _ = precision_recall_curve(y_test, y_pred_gb)
 
 
 auprc_logreg = auc(recall_logreg, precision_logreg)
@@ -322,3 +319,27 @@ plt.ylabel('Precision')
 plt.title('Precision-Recall Curve for Multiple ML Algorithms')
 plt.legend(loc='lower left')
 plt.show()
+
+import pickle
+
+with open('logistic_regression_model.pkl', 'wb') as file:
+    pickle.dump(logreg, file)
+
+with open('random_forest_model.pkl', 'wb') as file:
+    pickle.dump(rf, file)
+
+with open('mlp_model.pkl', 'wb') as file:
+    pickle.dump(mlp, file)
+
+with open('decision_tree_model.pkl', 'wb') as file:
+    pickle.dump(dt, file)
+
+with open('gradient_boosting_model.pkl', 'wb') as file:
+    pickle.dump(gb, file)
+
+with open('scaler.pkl', 'wb') as scaler_file:
+    pickle.dump(scaler, scaler_file)
+
+with open('pca_model.pkl', 'wb') as file:
+    pickle.dump(pca, file)
+
